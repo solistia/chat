@@ -100,6 +100,7 @@ $user = $services->select_table_chat_user($userid);
 
 	<script type="text/javascript">
 		var offset = 15;
+		var audio = new Audio('dist/sound/line.mp3');
 	  	$(function(){
 		    // Enable pusher logging - don't include this in production
 		    //Pusher.logToConsole = true;
@@ -135,6 +136,7 @@ $user = $services->select_table_chat_user($userid);
 		    		dir = 'me';
 		    	}else{
 		    		dir = '';
+		    		audio.play();
 		    	}
 
 		    	var append = '<div class="message '+dir+'" bis_skin_checked="1"><div class="text-main" bis_skin_checked="1">'+
@@ -155,13 +157,13 @@ $user = $services->select_table_chat_user($userid);
 		    //send message
 			$("#send-message").keypress(function (e) {
 
-			    if(e.which === 13 && !e.shiftKey) {
+			    if(e.which === 13 && !e.shiftKey && $(this).val() && $(this).val().trim()) {
 			        e.preventDefault();
 			        $message = $(this);
 				    $.ajax({
 				        url: 'services/post',  
 				        type: 'POST',
-				        data: {'message': $message.val(), 'userid': '<?= $userid ?>'},
+				        data: {'message': $message.val().trim(), 'userid': '<?= $userid ?>'},
 				        //Ajax events
 				        success: function(data){
 				        	$message.val('');

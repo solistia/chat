@@ -9,6 +9,7 @@ if(empty($_SESSION['username'])){
 }
 
 $user = $services->select_table_chat_admin($_SESSION['username']);
+$sound = $services->select_table_sound($user['sound_warning']);
 $chat = $services->select_table_chat_message('');
 ?>
 <head>
@@ -26,7 +27,8 @@ $chat = $services->select_table_chat_message('');
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js" type="text/javascript" ></script>	
 	<script src="https://js.pusher.com/4.1/pusher.min.js"></script>	
 	<script src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.3.0/bootbox.min.js" type="text/javascript" ></script>
-	<script src="../dist/js/jquery.imageReloader.js" type="text/javascript" ></script>	
+	<script src="../dist/js/jquery.imageReloader.js" type="text/javascript" ></script>
+	<script src="../dist/js/jquery.playSound.js" type="text/javascript" ></script>		
 </head>
 <body>
 	<main>
@@ -40,6 +42,7 @@ $chat = $services->select_table_chat_message('');
 							<div id="discussions" class="tab-pane fade active show">					
 								<div class="discussions">
 									<h1>ADMIN : <?= $user['name'] ?></h1>
+									<button>เปิดเสียงแจ้งเตือน</button>
 									<h1>Discussions</h1>
 									<div class="list-group" id="chats" role="tablist">
 										<div class="user_list_active"></div>
@@ -94,7 +97,9 @@ $chat = $services->select_table_chat_message('');
 								<div class="container" id="message_area_container">
 									<div class="col-md-12" id="message_area">
 										
-										<!-- MESSAGE AREA -->											
+										<!-- MESSAGE AREA -->	
+
+
 									
 									</div>
 								</div>
@@ -121,7 +126,7 @@ $chat = $services->select_table_chat_message('');
 										</form>
 									</div>
 								</div>
-							</div>
+							</div>							
 						</div>
 						<!-- End of Chat -->
 					</div>
@@ -133,6 +138,8 @@ $chat = $services->select_table_chat_message('');
 	<script type="text/javascript">
 	  var current;
 	  var offset = 15;
+	  var audio = new Audio('../dist/sound/<?= $sound['file'] ?>');
+
 	  $(function(){
 			$('#content').scroll(function() {
 				if($('#content').scrollTop() == 0 && $('#message_area_container').prop("scrollHeight") > 0){
@@ -181,26 +188,30 @@ $chat = $services->select_table_chat_message('');
 					$("#content").animate({ scrollTop: $('#message_area_container').prop("scrollHeight")}, 1000);
 					$(".slow-images").imageReloader();
 		    	}
-		    	
+
+		    	if(data.sendto == 'system'){
+		    		audio.play();
+		    	}
 				getReading();
 		    });
 
 			$("#send-message").keypress(function (e) {
-			    if(e.which === 13 && !e.shiftKey) {
+			    if(e.which === 13 && !e.shiftKey && $(this).val() && $(this).val().trim()) {
 			        e.preventDefault();
 			        $message = $(this);
 				    $.ajax({
 				        url: '../services/post',  
 				        type: 'POST',
-				        data: {'message': $message.val(), 'userid': current, 'sendto': current, 'admin_sent': '<?= $_SESSION['username'] ?>'},
+				        data: {'message': $message.val().trim(), 'userid': current, 'sendto': current, 'admin_sent': '<?= $_SESSION['username'] ?>'},
 				        //Ajax events
 				        success: function(data){
 				        	$message.val('');
-				        	console.log(data);
+				        	//console.log(data);
 				        }
 				    });
 			    }
-		    }); 
+		    });
+
 		});	
 
 	    function getMessage(id){

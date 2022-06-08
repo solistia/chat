@@ -43,6 +43,24 @@ class Services
     	return $result;
     }
 
+    public function select_table_sound($tag){
+        $query = 'SELECT * FROM sound_warning WHERE tag = "'.$tag.'";';
+        
+        try
+        {
+
+            $res = $this->conn->prepare($query);
+            $res->execute();
+           
+            $result = $res->fetch(PDO::FETCH_ASSOC);
+        }
+        catch (PDOException $e)
+        {
+            return false; 
+        }
+    
+        return $result;
+    }
 
     public function insert_table_chat_message($userid, $message, $type, $sendto, $date, $admin_sent, $reading){
        $query = 'INSERT INTO chat_message (userid , message, type, send_to, datetime, admin_sent, reading) VALUES (?, ?, ?, ?, ?, ?, ?);';   	

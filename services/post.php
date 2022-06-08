@@ -106,8 +106,6 @@
 		$save_chat = $services->insert_table_chat_message($userid, $message, $type, $sendto, $date, $admin_sent, $reading);
 		if($save_chat){
 
-				$message = '<pre>'.$message.'</pre>';
-
 				$data = array('message' => $message, 'type' => $type, 'sendto' => $sendto, 'date' => $date, 'userid' => $_POST['userid']);
 
 				$chanel = array($_POST['userid'], 'system');
