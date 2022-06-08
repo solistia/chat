@@ -84,6 +84,7 @@
 			}
 		}
 
+		pusher_trigger('update reading', 'system', 'update');
 		echo $data;
 	}
 ?>

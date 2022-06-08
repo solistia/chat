@@ -28,7 +28,8 @@ $chat = $services->select_table_chat_message('');
 	<script src="https://js.pusher.com/4.1/pusher.min.js"></script>	
 	<script src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.3.0/bootbox.min.js" type="text/javascript" ></script>
 	<script src="../dist/js/jquery.imageReloader.js" type="text/javascript" ></script>
-	<script src="../dist/js/jquery.playSound.js" type="text/javascript" ></script>		
+	<script src="../dist/js/jquery.playSound.js" type="text/javascript" ></script>	
+
 </head>
 <body>
 	<main>
@@ -58,8 +59,8 @@ $chat = $services->select_table_chat_message('');
 												</div>
 											<?php } ?>
 											<div class="data">
-												<h5><?= $row['userid'] ?></h5>
-												<p>NOTE</p>
+												<h5 id="<?= $row['userid'].'name' ?>"><?= $row['name'] ?></h5>
+												<p id="<?= $row['userid'].'note' ?>"><?= $row['note'] ?></p>
 											</div>
 										</a>
 										<?php } ?>
@@ -84,8 +85,8 @@ $chat = $services->select_table_chat_message('');
 									<div class="col-md-12">
 										<div class="inside">
 											<div class="data">
-												<h5><a href="#" onclick="test()">Keith Morris</a></h5>
-												<p>NOTE</p>
+												<h5><input type="text" name="" id="current_user_name" style="border: none;font-weight: bold;"></h5>
+												<p><input type="text" name="" id="current_user_note" style="border: none;color: #bdbac2;"></p>
 											</div>
 
 										</div>
@@ -100,7 +101,6 @@ $chat = $services->select_table_chat_message('');
 										<!-- MESSAGE AREA -->	
 
 
-									
 									</div>
 								</div>
 							</div>
@@ -141,18 +141,20 @@ $chat = $services->select_table_chat_message('');
 	  var audio = new Audio('../dist/sound/<?= $sound['file'] ?>');
 
 	  $(function(){
+	  		//load more
 			$('#content').scroll(function() {
 				if($('#content').scrollTop() == 0 && $('#message_area_container').prop("scrollHeight") > 0){
 		            getMoreMessage();
 				}
 			});
-
+			// initial pusher
 		    var pusher = new Pusher('04f1f2f158fedc82e415', {
 		      cluster: 'ap1'
 		    });
 
 		    var channel = pusher.subscribe('system');
 
+		    //new message
 		    channel.bind('message', function(data) {
 		    	if(current == data.userid){
 			    	var message;
@@ -192,9 +194,20 @@ $chat = $services->select_table_chat_message('');
 		    	if(data.sendto == 'system'){
 		    		audio.play();
 		    	}
+
 				getReading();
 		    });
 
+		    //on update user
+		    channel.bind('update', function(data) {
+		    	if(current == data.userid){
+		    		$('#'+data.element).text(data.value);
+		    		$('#'+data.element2).val(data.value);
+		    	}
+		    	getReading();
+		    });
+
+		    //send message
 			$("#send-message").keypress(function (e) {
 			    if(e.which === 13 && !e.shiftKey && $(this).val() && $(this).val().trim()) {
 			        e.preventDefault();
@@ -212,8 +225,51 @@ $chat = $services->select_table_chat_message('');
 			    }
 		    });
 
-		});	
+			//update name
+		    $("#current_user_name").blur(function () {
+		        if(current){
+		        	var name = $(this).val();
+				    $.ajax({
+				        url: '../services/updateuser',  
+				        type: 'POST',
+				        data: {'userid': current, 'name': name},
+				        //Ajax events
+				        success: function(data){
+				        	var data = JSON.parse(data);
 
+				        	if(data.type == 'success'){
+				        		$('#'+current+'name').text(name);
+				        	}
+
+				        	console.log(data);
+				        }
+				    });
+		        }
+		    });
+
+		    //update Note
+		    $("#current_user_note").blur(function () {
+		        if(current){
+		        	var note = $(this).val();
+				    $.ajax({
+				        url: '../services/updateuser',  
+				        type: 'POST',
+				        data: {'userid': current, 'note': note},
+				        //Ajax events
+				        success: function(data){
+				        	var data = JSON.parse(data);
+
+				        	if(data.type == 'success'){
+				        		$('#'+current+'note').text(note);
+				        	}
+
+				        	console.log(data);
+				        }
+				    });
+		        }
+		    });		    
+		});	
+	  	//get message
 	    function getMessage(id){
 	    	current = id;
 	    	$('#current_user').val(current);
@@ -235,11 +291,13 @@ $chat = $services->select_table_chat_message('');
 		        	offset = 15;
 		        	$('#message_area').append(data);
 		        	var lastMsg = $('.message:last');
+		        	$('#current_user_name').val($('#'+id+'name').text());
+		        	$('#current_user_note').val($('#'+id+'note').text());
 					$("#content").animate({ scrollTop: $('#message_area_container').prop("scrollHeight")+1000}, 1500);
 		        }
 		    });
 	    } 
-
+	    //get more message
 	    function getMoreMessage(){
 		    $.ajax({
 		        url: '../services/getchat',  
@@ -258,6 +316,7 @@ $chat = $services->select_table_chat_message('');
 		    });
 	    } 	    
 
+	    //get count reading
 	    function getReading(){
 		    $.ajax({
 		        url: '../services/getreading',  
@@ -270,6 +329,7 @@ $chat = $services->select_table_chat_message('');
 		    });
 	    }	  
 
+	    //upload file
 		function uploadFile(){
 	    	var form = document.getElementById('send-file');
 			var formData = new FormData(form);

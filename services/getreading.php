@@ -1,17 +1,14 @@
 <?php 
-	require 'pusher/trigger.php';
-	require 'cloudinary/trigger.php';
 	require_once 'service.php';
 	$services = new Services();
 
 
 	if(isset($_POST['userid'])){
 		$update_message = $services->update_table_chat_message_reading($_POST['userid']);
-		$condition = 'WHERE userid!="'.$_POST['userid'].'"';
+		$condition = 'WHERE chat_message.userid!="'.$_POST['userid'].'"';
 	}else{
 		$condition = '';
 	}
-
 	
 	$userlist = $services->select_table_chat_message($condition);
 
@@ -27,8 +24,8 @@
 							<img class="avatar-md" src="../dist/img/avatars/images.png" data-toggle="tooltip" data-placement="top" title="Keith" alt="avatar">
 							'.$count.'
 							<div class="data">
-								<h5>'.$row['userid'].'</h5>
-								<p>NOTE</p>
+								<h5 id="'.$row['userid'].'name'.'">'.$row['name'].'</h5>
+								<p id="'.$row['userid'].'note">'.$row['note'].'</p>
 							</div>
 						</a>';
 	}

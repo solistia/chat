@@ -1,6 +1,4 @@
 <?php 
-
-
 	require_once 'service.php';
 	$services = new Services();
 	session_start();

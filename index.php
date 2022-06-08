@@ -17,6 +17,10 @@ $services = new Services();
 session_start();
 
 $user = $services->select_table_chat_user($userid);
+if(!$user){
+	$create_user = $services->insert_table_chat_user($userid, $userid, $datetimenow, $datetimenow); 
+}
+
 ?>
 <head>
 	<meta charset="utf-8">
