@@ -70,6 +70,7 @@ $allsound = $services->select_table_sound_all();
 										?>
 
 									</select>
+
 									<h1>Discussions</h1>
 									<div class="list-group" id="chats" role="tablist">
 										<div class="user_list_active">
@@ -160,7 +161,7 @@ $allsound = $services->select_table_sound_all();
 	  var current;
 	  var offset = 15;
 	  var audio = new Audio('../dist/sound/<?= $sound['file'] ?>');
-
+	  audio.mute = true;
 	  $(function(){
 	  		//load more
 			$('#content').scroll(function() {

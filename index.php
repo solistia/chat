@@ -117,6 +117,7 @@ if(!$user){
 	<script type="text/javascript">
 		var offset = 15;
 		var audio = new Audio('dist/sound/line.mp3');
+
 	  	$(function(){
 		    // Enable pusher logging - don't include this in production
 		    //Pusher.logToConsole = true;
