@@ -8,11 +8,17 @@
     ini_set("error_reporting", E_ALL);
     error_reporting(E_ALL & ~E_NOTICE);
     
-    //databasse
+    //databasse chat
     define('host_sv','localhost');
     define('db_sv','chat');
     define('username_sv','root');
     define('password_sv','');
+
+    //database web
+    define('host_sv2','localhost');
+    define('db_sv2','slot_new');
+    define('username_sv2','root');
+    define('password_sv2','');
 
 
     //datetime

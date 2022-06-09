@@ -1,24 +1,40 @@
 <?php 
 
-if(!empty($_GET['userid'])){
-	$userid = $_GET['userid'];
-}else{
-	$userid = 'U0dbbc5c7f56d0e00d969daf4e251545f';
-}
-
 if(!empty($_GET['returl_url'])){
 	$returl_url = $_GET['returl_url'];
 }else{
 	$returl_url = '#';
 }
 
+if(!empty($_GET['token'])){
+	$token = $_GET['token'];
+}else{
+	header('location: '. $returl_url);
+	die('not allowed');
+}
+
+//start include require file
 require_once 'services/service.php';
 $services = new Services();
-session_start();
+$services2 = new Services2();
 
+//login
+$condition = 'idlogin = "'.$token.'"';
+$login = $services2->select_table_user($condition);
+
+if(!$login){
+	header('location: '. $returl_url);
+	die('not allowed');
+}
+
+$userid = $login['playerusername'];
+$agent_name = $login['agentname_betflix'];
+$fullname = $login['namesurname'];
+
+//creatre chat user
 $user = $services->select_table_chat_user($userid);
 if(!$user){
-	$create_user = $services->insert_table_chat_user($userid, $userid, $datetimenow, $datetimenow); 
+	$create_user = $services->insert_table_chat_user($userid, $fullname, $agent_name, $datetimenow, $datetimenow); 
 }
 
 ?>
@@ -53,12 +69,9 @@ if(!$user){
 									<div class="col-md-12">
 										<div class="inside">
 											<a href="#"></a>
-											<div class="status">
-												<i class="material-icons online">fiber_manual_record</i>
-											</div>
 											<div class="data">
 												<h5><a href="<?= $returl_url ?>">HOME</a></h5>
-												<span><?= $userid ?></span>
+												<span><?= $fullname ?></span>
 											</div>
 										</div>
 									</div>
@@ -75,16 +88,15 @@ if(!$user){
 							<div class="container">
 								<div class="col-md-12">
 									<div class="bottom">
-										<form class="position-relative w-100">
+										<div class="position-relative w-100">
 											<textarea id="send-message" name="message" class="form-control" rows="1" placeholder="Type Here ...."></textarea>
-											<input type="text" name="name" id="user_name" hidden value="Keith Morris">
-											<button type="submit" id="send_message" class="btn send"><i class="material-icons" hidden>send</i></button>
-										</form>
+											<button type="submit" id="send_message" class="btn send"><i class="material-icons">send</i></button>
+										</div>
 										<form id="send-file">
 											<label>
 												<input type="hidden" name="userid" value="<?= $userid ?>">
 												<input type="file" name="fileupload" accept="image/png, image/jpeg, video/mp4" onchange="uploadFile(this)"  >
-												<span class="btn attach d-sm-block d-none">
+												<span class="btn attach d-sm-block">
 													<i class="material-icons">attach_file</i>
 												</span>
 											</label> 												
@@ -178,6 +190,23 @@ if(!$user){
 		    }); 
 
 
+			$('#send_message').click(function(){
+			    $message = $('#send-message');
+			    console.log($message);
+			    if($message.val() && $message.val().trim()){
+				    $.ajax({
+				        url: 'services/post',  
+				        type: 'POST',
+				        data: {'message': $message.val().trim(), 'userid': '<?= $userid ?>'},
+				        //Ajax events
+				        success: function(data){
+				        	$message.val('');
+				        	//console.log(data);
+				        }
+			    	});		    	
+			    }
+			});
+
 			// getmessage
 		    $.ajax({
 		        url: 'services/getchat',  
@@ -193,7 +222,7 @@ if(!$user){
 
 		});	
 
-
+	  	//get more message
 	    function getMoreMessage(){
 		    $.ajax({
 		        url: 'services/getchat',  
@@ -211,6 +240,7 @@ if(!$user){
 		    });
 	    } 
 
+	    //upload file
 		function uploadFile(){
 	    var form = document.getElementById('send-file');
 			var formData = new FormData(form);
@@ -223,7 +253,11 @@ if(!$user){
 		        contentType: false,
 		        //Ajax events
 		        success: function(data){
-		        	//console.log(data);
+		        	var data = JSON.parse(data);
+
+		        	if(data.type != 'success'){
+		        		alert(data.message);
+		        	}
 		        }
 		    });
 		} 

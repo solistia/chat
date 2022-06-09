@@ -20,11 +20,18 @@
 			$count = '';
 		}
 
+		$username;
+		if($row['name']){
+			$username = $row['name'];
+		}else{
+			$username = $row['username'];
+		}
+
 		$data = $data.'<a href="#" onclick="getMessage(this.id)" class="filterDiscussions all read single user_list" id="'.$row['userid'].'" data-toggle="list" role="tab">
 							<img class="avatar-md" src="../dist/img/avatars/images.png" data-toggle="tooltip" data-placement="top" title="Keith" alt="avatar">
 							'.$count.'
 							<div class="data">
-								<h5 id="'.$row['userid'].'name'.'">'.$row['name'].'</h5>
+								<h5 id="'.$row['userid'].'name'.'">'.$username.' : '.$row['agent_name'].'</h5>
 								<p id="'.$row['userid'].'note">'.$row['note'].'</p>
 							</div>
 						</a>';

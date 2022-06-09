@@ -47,10 +47,10 @@
             "type" => "error",
             "message" => "รองรับไฟล์ภาพนามสกุล JPG, JPEG, PNG, MP4 เท่านั้น"
         );
-      }else if (($_FILES["fileupload"]["size"] > 20000000)) {
+      }else if (($_FILES["fileupload"]["size"] > 10000000)) {
         $response = array(
             "type" => "error",
-            "message" => "จำกัดขนาดไฟล์สูงสุด = 20MB"
+            "message" => "จำกัดขนาดไฟล์สูงสุด = 10MB"
         );
       }else{
 
@@ -60,16 +60,24 @@
       		$message = $return['secure_url'];
       		$save_chat = $services->insert_table_chat_message($userid, $message, $file_type, $sendto, $date, $admin_sent, $reading);
 
-	 				$data = array('message' => $message, 'type' => $file_type, 'sendto' => $sendto, 'date'=> $date, 'userid' => $_POST['userid']);
+      		if($save_chat){
 
-	 				$chanel = array($_POST['userid'], 'system');
-					pusher_trigger($data, $chanel, 'message');
+	 	 				$data = array('message' => $message, 'type' => $file_type, 'sendto' => $sendto, 'date'=> $date, 'userid' => $_POST['userid']);
 
-	        $response = array(    
-	        	"type" => "success",
-	          "message" => ''
-	        ); 
+		 				$chanel = array($_POST['userid'], 'system');
+						pusher_trigger($data, $chanel, 'message');
 
+		        $response = array(    
+		        	"type" => "success",
+		          "message" => ''
+		        ); 
+
+      		}else{
+		        $response = array(    
+		        	"type" => "error",
+		          "message" => "Can't savet to database"
+		        ); 
+      		}
       	}else{
 	        $response = array(    
 	        	"type" => "error",

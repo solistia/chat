@@ -2,6 +2,7 @@
 session_start();
 require_once '../services/service.php';
 $services = new Services();
+//$services2 = new Services2();
 
 if(empty($_SESSION['username'])){
 	header('location: login');
@@ -10,7 +11,7 @@ if(empty($_SESSION['username'])){
 
 $user = $services->select_table_chat_admin($_SESSION['username']);
 $sound = $services->select_table_sound($user['sound_warning']);
-$chat = $services->select_table_chat_message('');
+$allsound = $services->select_table_sound_all();
 ?>
 <head>
 	<meta charset="utf-8">
@@ -29,9 +30,20 @@ $chat = $services->select_table_chat_message('');
 	<script src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.3.0/bootbox.min.js" type="text/javascript" ></script>
 	<script src="../dist/js/jquery.imageReloader.js" type="text/javascript" ></script>
 	<script src="../dist/js/jquery.playSound.js" type="text/javascript" ></script>	
-
 </head>
+
 <body>
+	<!-- POP UP -->
+	<div id="popup1" class="overlay">
+	  <div class="popup">
+	    <h2 id="user_info_name">User Info</h2>
+	    <a class="close" onclick="closeOverley()">&times;</a>
+	    <div class="content" id="user_info">
+			<!-- USER INFO -->      		    		   		 		
+	    </div>
+	  </div>
+	</div>
+
 	<main>
 		<div class="layout">
 			<!-- Start of Sidebar -->
@@ -39,36 +51,44 @@ $chat = $services->select_table_chat_message('');
 				<div class="container">
 					<div class="col-md-12">
 						<div class="tab-content">
+
 							<!-- Start of Discussions -->
 							<div id="discussions" class="tab-pane fade active show">					
 								<div class="discussions">
 									<h1>ADMIN : <?= $user['name'] ?></h1>
-									<button>เปิดเสียงแจ้งเตือน</button>
+									<label>เลือกเสียง</label>
+									<select id="sound_select" onchange="updateSound(this)">
+
+										<?php 
+											foreach($allsound as $row){
+												if($user['sound_warning'] == $row['tag']){
+													echo '<option value="'.$row['tag'].'" selected>'.$row['tag'].'</option>';
+												}else{
+													echo '<option value="'.$row['tag'].'">'.$row['tag'].'</option>';
+												}
+											}
+										?>
+
+									</select>
 									<h1>Discussions</h1>
 									<div class="list-group" id="chats" role="tablist">
-										<div class="user_list_active"></div>
+										<div class="user_list_active">
+											
+											<!-- CURRENT USER -->
+
+										</div>
 										<div class="user_list_not_active">
-										<?php 
-											foreach($chat as $row){
-										?>
-										<a href="#" onclick="getMessage(this.id)" class="filterDiscussions all read single user_list" id="<?= $row['userid']  ?>" data-toggle="list" role="tab">
-											<img class="avatar-md" src="../dist/img/avatars/images.png" data-toggle="tooltip" data-placement="top" title="Keith" alt="avatar">
-											<?php if($row['count'] > 0){?> 
-												<div class="new bg-red" id="<?= $row['userid'].'count' ?>" bis_skin_checked="1">
-													<span class="count_num"><?= $row['count'] ?></span>
-												</div>
-											<?php } ?>
-											<div class="data">
-												<h5 id="<?= $row['userid'].'name' ?>"><?= $row['name'] ?></h5>
-												<p id="<?= $row['userid'].'note' ?>"><?= $row['note'] ?></p>
-											</div>
-										</a>
-										<?php } ?>
+
+
+											<!-- USER LIST -->
+
+
 										</div>
 									</div>
 								</div>
 							</div>
 							<!-- End of Discussions -->
+
 						</div>
 					</div>
 				</div>
@@ -81,11 +101,12 @@ $chat = $services->select_table_chat_message('');
 						<!-- Start of Chat -->
 						<div class="chat" id="chat1">
 							<div class="top">
+								<!-- HEADER -->
 								<div class="container">
 									<div class="col-md-12">
 										<div class="inside">
 											<div class="data">
-												<h5><input type="text" name="" id="current_user_name" style="border: none;font-weight: bold;"></h5>
+												<h5 id="current_user_name" onclick="getInfo()" style="cursor: pointer;"></h5>
 												<p><input type="text" name="" id="current_user_note" style="border: none;color: #bdbac2;"></p>
 											</div>
 
@@ -93,6 +114,7 @@ $chat = $services->select_table_chat_message('');
 										<a href="logout" class="btn float-right">logout</a>
 									</div>
 								</div>
+								<!-- END HEADER -->
 							</div>
 							<div class="content" id="content">
 								<div class="container" id="message_area_container">
@@ -107,19 +129,18 @@ $chat = $services->select_table_chat_message('');
 							<div class="container">
 								<div class="col-md-12">
 									<div class="bottom">
-										<form class="position-relative w-100">
-											<textarea id="send-message" class="form-control" placeholder="Start typing for reply..." rows="1"></textarea>
-											<input type="text" name="name" id="user_name" hidden value="Keith Morris">
+										<div class="position-relative w-100">
+											<textarea id="send-message" class="form-control" placeholder="Type Here..." rows="1"></textarea>
 											<!--<button class="btn emoticons"><i class="material-icons">insert_emoticon</i></button>-->
-											<!--<button type="submit" id="send_message" class="btn send"><i class="material-icons">send</i></button>-->
-										</form>
+											<button id="send_message" class="btn send"><i class="material-icons">send</i></button>
+										</div>
 										<form id="send-file">
 											<label>
 												<input type="hidden" id="current_user" name="userid" value="">
 												<input type="hidden" id="sendto" name="sendto" value="<?= $userid ?>">
 												<input type="hidden" id="admin_sent" name="admin_sent" value="<?= $_SESSION['username'] ?>">
 												<input type="file" name="fileupload" accept="image/png, image/jpeg, video/mp4" onchange="uploadFile(this)"  >
-												<span class="btn attach d-sm-block d-none">
+												<span class="btn attach d-sm-block">
 													<i class="material-icons">attach_file</i>
 												</span>
 											</label> 												
@@ -147,6 +168,7 @@ $chat = $services->select_table_chat_message('');
 		            getMoreMessage();
 				}
 			});
+
 			// initial pusher
 		    var pusher = new Pusher('04f1f2f158fedc82e415', {
 		      cluster: 'ap1'
@@ -219,33 +241,26 @@ $chat = $services->select_table_chat_message('');
 				        //Ajax events
 				        success: function(data){
 				        	$message.val('');
-				        	//console.log(data);
 				        }
 				    });
 			    }
 		    });
 
-			//update name
-		    $("#current_user_name").blur(function () {
-		        if(current){
-		        	var name = $(this).val();
+			$('#send_message').click(function(){
+			    $message = $('#send-message');
+			    console.log($message);
+			    if($message.val() && $message.val().trim()){
 				    $.ajax({
-				        url: '../services/updateuser',  
+				        url: '../services/post',  
 				        type: 'POST',
-				        data: {'userid': current, 'name': name},
+				        data: {'message': $message.val().trim(), 'userid': current, 'sendto': current, 'admin_sent': '<?= $_SESSION['username'] ?>'},
 				        //Ajax events
 				        success: function(data){
-				        	var data = JSON.parse(data);
-
-				        	if(data.type == 'success'){
-				        		$('#'+current+'name').text(name);
-				        	}
-
-				        	console.log(data);
+				        	$message.val('');
 				        }
-				    });
-		        }
-		    });
+			    	});		    	
+			    }
+			});
 
 		    //update Note
 		    $("#current_user_note").blur(function () {
@@ -267,8 +282,12 @@ $chat = $services->select_table_chat_message('');
 				        }
 				    });
 		        }
-		    });		    
+		    });	
+
+		    //start page with get userlist
+		    getReading();	    
 		});	
+
 	  	//get message
 	    function getMessage(id){
 	    	current = id;
@@ -291,12 +310,13 @@ $chat = $services->select_table_chat_message('');
 		        	offset = 15;
 		        	$('#message_area').append(data);
 		        	var lastMsg = $('.message:last');
-		        	$('#current_user_name').val($('#'+id+'name').text());
+		        	$('#current_user_name').text($('#'+id+'name').text());
 		        	$('#current_user_note').val($('#'+id+'note').text());
 					$("#content").animate({ scrollTop: $('#message_area_container').prop("scrollHeight")+1000}, 1500);
 		        }
 		    });
 	    } 
+
 	    //get more message
 	    function getMoreMessage(){
 		    $.ajax({
@@ -342,10 +362,53 @@ $chat = $services->select_table_chat_message('');
 		        contentType: false,
 		        //Ajax events
 		        success: function(data){
-		        	//console.log(data);
+		        	var data = JSON.parse(data);
+
+		        	if(data.type != 'success'){
+		        		alert(data.message);
+		        	}
 		        }
 		    });
 		} 
 			
+	    //get user info
+	    function getInfo(){
+		    $.ajax({
+		        url: '../services/getInfo',  
+		        type: 'POST',
+		        data: {'userid': current},
+		        //Ajax events
+		        success: function(data){
+		        	var data = JSON.parse(data);
+
+	        		$('#user_info').html(data.message);
+	        		$('#popup1').addClass('overlay-visible');
+		        }
+		    });
+	    }	
+
+	    //update sound warning
+	   	function updateSound(select){
+
+		    $.ajax({
+		        url: '../services/updateadmin',  
+		        type: 'POST',
+		        data: {'username': '<?= $_SESSION['username'] ?>', 'sound': select.value},
+		        //Ajax events
+		        success: function(data){
+		        	var data = JSON.parse(data);
+		        	if(data.type == 'success'){
+		        		audio = new Audio('../dist/sound/'+data.message);
+		        		audio.play();
+		        	}else{
+		        		alert(data.message);
+		        	}
+		        }
+		    });
+	   	}
+
+    	function closeOverley (){
+	    	$('.overlay').removeClass('overlay-visible');
+	    }			
 	</script>
 </body>

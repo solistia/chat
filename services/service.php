@@ -1,5 +1,6 @@
 <?php
 require_once "setting.php";
+require_once "service2.php";
 class Services
 {
     public function __construct()
@@ -43,12 +44,12 @@ class Services
     	return $result;
     }
 
-     public function insert_table_chat_user($userid, $name, $created, $updated){
-       $query = 'INSERT INTO chat_user (userid, name, created, updated) VALUES (?, ?, ?, ?);';      
+     public function insert_table_chat_user($userid, $name, $agent_name, $created, $updated){
+       $query = 'INSERT INTO chat_user (userid, name, agent_name, created, updated) VALUES (?, ?, ?, ?, ?);';      
         try
         {
             $res = $this->conn->prepare($query);
-            $values = array($userid, $name, $created, $updated);
+            $values = array($userid, $name, $agent_name, $created, $updated);
           
             $res->execute($values);
         }
@@ -86,6 +87,7 @@ class Services
     
         return true;     
     }
+
     public function select_table_sound($tag){
         $query = 'SELECT * FROM sound_warning WHERE tag = "'.$tag.'";';
         
@@ -96,6 +98,25 @@ class Services
             $res->execute();
            
             $result = $res->fetch(PDO::FETCH_ASSOC);
+        }
+        catch (PDOException $e)
+        {
+            return false; 
+        }
+    
+        return $result;
+    }
+
+   public function select_table_sound_all(){
+        $query = 'SELECT * FROM sound_warning ;';
+        
+        try
+        {
+
+            $res = $this->conn->prepare($query);
+            $res->execute();
+           
+            $result = $res->fetchAll(PDO::FETCH_ASSOC);
         }
         catch (PDOException $e)
         {
@@ -189,8 +210,32 @@ class Services
         return $result;       
     }
 
+    function update_table_chat_chat_admin($username, $set){
+        $query = 'UPDATE user_admin SET '.$set.' WHERE username ="'.$username.'";';
+
+        try
+        {
+            /* Prepare step (can be done only once) */
+            $res = $this->conn->prepare($query);
+
+            /* Execute step, with the array of values */
+            $res->execute();
+
+        }
+        
+        catch (PDOException $e)
+        {
+           /* If there is an error an exception is thrown */
+           echo $e->getMessage();
+           die();
+           return false;
+        }
+    
+        return true;     
+    }
+
     public function select_table_chat_message($condition){
-        $query = 'SELECT chat_message.*, SUM(CASE WHEN chat_message.reading = "n" THEN 1 ELSE 0 END) as count, chat_user.name, chat_user.note FROM chat_message INNER JOIN chat_user ON chat_message.userid=chat_user.userid '.$condition.' GROUP BY userid ORDER BY count DESC;';
+        $query = 'SELECT chat_message.*, SUM(CASE WHEN chat_message.reading = "n" THEN 1 ELSE 0 END) as count, chat_user.name, chat_user.note, chat_user.username, chat_user.agent_name FROM chat_message INNER JOIN chat_user ON chat_message.userid=chat_user.userid '.$condition.' GROUP BY userid ORDER BY count DESC;';
 
         try
         {
