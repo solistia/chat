@@ -46,6 +46,7 @@ if(!$user){
 	<!-- Bootstrap core CSS -->
 	<link href="dist/css/lib/bootstrap.min.css" type="text/css" rel="stylesheet">
 	<link href="dist/css/image_reloader.css" type="text/css" rel="stylesheet">
+	<link href="dist/css/style.css" type="text/css" rel="stylesheet">
 	<!-- Swipe core CSS -->
 	<link href="dist/css/swipe.min.css" type="text/css" rel="stylesheet">
 	<!-- Favicon -->
@@ -242,8 +243,14 @@ if(!$user){
 	    } 
 
 	    //upload file
-		function uploadFile(){
-	    var form = document.getElementById('send-file');
+		function uploadFile(file){
+
+			if(file.files[0].size > 10485760){
+				alert("File is too big!");
+				return false;
+			}
+			
+			var form = document.getElementById('send-file');
 			var formData = new FormData(form);
 			$('#fileupload').val('');
 		    $.ajax({

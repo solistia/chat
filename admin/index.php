@@ -21,6 +21,7 @@ $allsound = $services->select_table_sound_all();
 	<!-- Bootstrap core CSS -->
 	<link href="../dist/css/lib/bootstrap.min.css" type="text/css" rel="stylesheet">
 	<link href="../dist/css/image_reloader.css" type="text/css" rel="stylesheet">
+	<link href="../dist/css/style.css" type="text/css" rel="stylesheet">
 	<!-- Swipe core CSS -->
 	<link href="../dist/css/swipe.min.css" type="text/css" rel="stylesheet">
 	<!-- Favicon -->
@@ -48,10 +49,11 @@ $allsound = $services->select_table_sound_all();
 		<div class="layout">
 			<!-- Start of Sidebar -->
 			<div class="sidebar" id="sidebar">
+
 				<div class="container">
 					<div class="col-md-12">
 						<div class="tab-content">
-
+							<a class="close" onclick="closeSidebar()">&times;</a>
 							<!-- Start of Discussions -->
 							<div id="discussions" class="tab-pane fade active show">					
 								<div class="discussions">
@@ -106,6 +108,9 @@ $allsound = $services->select_table_sound_all();
 								<div class="container">
 									<div class="col-md-12">
 										<div class="inside">
+											<div class="data" onclick="openSidebar()">
+												<i class="material-icons">dehaze</i>
+											</div>
 											<div class="data">
 												<h5 id="current_user_name" onclick="getInfo()" style="cursor: pointer;"></h5>
 												<p><input type="text" name="" id="current_user_note" style="border: none;color: #bdbac2;"></p>
@@ -351,7 +356,13 @@ $allsound = $services->select_table_sound_all();
 	    }	  
 
 	    //upload file
-		function uploadFile(){
+		function uploadFile(file){
+
+			if(file.files[0].size > 10485760){
+				alert("File is too big!");
+				return false;
+			}
+
 	    	var form = document.getElementById('send-file');
 			var formData = new FormData(form);
 			$('#fileupload').val('');
@@ -406,6 +417,15 @@ $allsound = $services->select_table_sound_all();
 		        	}
 		        }
 		    });
+	   	}
+
+	   	function closeSidebar(){
+			$('.sidebar').toggle({ direction: "left" }, 1000);
+
+	   	}
+
+	   	function openSidebar(){
+			$('.sidebar').toggle({ direction: "left" }, 1000);	
 	   	}
 
     	function closeOverley (){
