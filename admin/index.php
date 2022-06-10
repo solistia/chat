@@ -12,7 +12,7 @@ if(empty($_SESSION['username'])){
 $user = $services->select_table_chat_admin($_SESSION['username']);
 $sound = $services->select_table_sound($user['sound_warning']);
 $allsound = $services->select_table_sound_all();
-echo gethostname();
+
 ?>
 <head>
 	<meta charset="utf-8">
