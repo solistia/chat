@@ -82,7 +82,13 @@ pre{
 .list-group{
     max-height: 80%;
     overflow-y: scroll;
+    height: 80%;
 }
+
+.sidebar{
+    overflow-y: hidden !important;
+}
+
 .sidebar .discussions .single{
     position: relative;
 }
@@ -91,7 +97,7 @@ pre{
     left: 25px !important;
 }
 
-@media (max-width: 568px){
+@media (max-width: 820px){
     .main .chat .content {
         height: 500px !important;
     }    

@@ -16,7 +16,7 @@
 		$message ='
 
 		    <div class="row">
-		    	<div class="col-4">
+		    	<div class="col-5">
 		    		<label class="bold">playerusername</label>
 		    	</div>
 		    	<div class="col-7">		    	
@@ -24,7 +24,7 @@
 	    		</div>      			
     		</div>
 		    <div class="row">
-		    	<div class="col-4">
+		    	<div class="col-5">
 		    		<label class="bold">betflikuser</label>
 		    	</div>
 		    	<div class="col-7">		    	
@@ -32,7 +32,7 @@
 	    		</div>      			
     		</div>
 		    <div class="row">
-		    	<div class="col-4">
+		    	<div class="col-5">
 		    		<label class="bold">agentname_betflix </label>
 		    	</div>
 		    	<div class="col-7">		    	
@@ -40,7 +40,7 @@
 	    		</div>      			
     		</div>
 		    <div class="row">
-		    	<div class="col-4">
+		    	<div class="col-5">
 		    		<label class="bold">namesurname</label>
 		    	</div>
 		    	<div class="col-7">		    	
@@ -48,7 +48,7 @@
 	    		</div>      			
     		</div>
 		    <div class="row">
-		    	<div class="col-4">
+		    	<div class="col-5">
 		    		<label class="bold">blankname</label>
 		    	</div>
 		    	<div class="col-7">	    	
@@ -56,7 +56,7 @@
 	    		</div>     			
     		</div>
 		    <div class="row">
-		    	<div class="col-4">
+		    	<div class="col-5">
 		    		<label class="bold">bankaccountnumber</label>
 		    	</div>
 		    	<div class="col-7">
@@ -64,7 +64,7 @@
 	    		</div>  		
     		</div>    		    				
 		    <div class="row">
-		    	<div class="col-4">
+		    	<div class="col-5">
 		    		<label class="bold">recommender</label>
 		    	</div>
 		    	<div class="col-7">
@@ -72,7 +72,7 @@
 	    		</div>    			
     		</div>
 		    <div class="row">
-		    	<div class="col-4">
+		    	<div class="col-5">
 		    		<label class="bold">datetime_last </label>
 		    	</div>
 		    	<div class="col-7">

@@ -55,7 +55,7 @@ $allsound = $services->select_table_sound_all();
 				<div class="container">
 					<div class="col-md-12">
 						<div class="tab-content">
-							<a class="close openSidebar" onclick="closeSidebar()">&times;</a>
+							<a class="close" onclick="closeSidebar()">&times;</a>
 							<!-- Start of Discussions -->
 							<div id="discussions" class="tab-pane fade active show">					
 								<div class="discussions">
@@ -110,7 +110,7 @@ $allsound = $services->select_table_sound_all();
 								<div class="container">
 									<div class="col-md-12">
 										<div class="inside">
-											<div class="data openSidebar" onclick="openSidebar()">
+											<div class="col-2" onclick="openSidebar()">
 												<i class="material-icons">dehaze</i>
 											</div>
 											<div class="data">
@@ -337,6 +337,10 @@ $allsound = $services->select_table_sound_all();
 		        	$('#current_user_note').val($('#'+id+'note').text());
 					$("#content").animate({ scrollTop: $('#message_area_container').prop("scrollHeight")+5000}, 1500);
 					$gallery.refresh();
+
+					if (window.innerWidth < 821) {
+					    $('.sidebar').toggle({ direction: "left" }, 1000);	
+					}					
 		        }
 		    });
 	    } 
