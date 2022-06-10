@@ -35,10 +35,10 @@
       $fileExt = pathinfo($_FILES['fileupload']['name'], PATHINFO_EXTENSION);
 
       if($fileExt == "mp4"){
-        $folder = 'chat/upload/vid/'.uniqid();
+        $folder = $_SERVER['SERVER_NAME'].'/chat/upload/vid/'.uniqid();
         $file_type="video"; 
       }else{
-        $folder = 'chat/upload/img/'.uniqid(); 
+        $folder = $_SERVER['SERVER_NAME'].'/chat/upload/img/'.uniqid(); 
         $file_type="image";
       }
 
