@@ -26,7 +26,7 @@ $allsound = $services->select_table_sound_all();
 	<!-- Swipe core CSS -->
 	<link href="../dist/css/swipe.min.css" type="text/css" rel="stylesheet">
 	<!-- Favicon -->
-	<link href="dist/img/favicon.png" type="image/png" rel="icon">
+	<link href="../dist/img/favicon.png" type="image/png" rel="icon">
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js" type="text/javascript" ></script>	
 	<script src="https://js.pusher.com/4.1/pusher.min.js"></script>	
 	<script src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.3.0/bootbox.min.js" type="text/javascript" ></script>
