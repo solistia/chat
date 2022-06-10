@@ -75,6 +75,10 @@ pre{
   overflow: auto;
 }
 
+.openSidebar{
+    display: none;
+}
+
 @media (max-width: 568px){
     .main .chat .content {
         height: 500px !important;
@@ -95,4 +99,8 @@ pre{
       position: relative;
       transition: all 0s ease-in-out;
     }   
+
+    .openSidebar{
+        display: block;
+    }
 }

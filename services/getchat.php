@@ -40,7 +40,7 @@
 			}
 
 			if($row['type'] == 'image'){
-				$msg = '<img src="'.$row['message'].'" width="150">';
+				$msg = '<a href="'.$row['message'].'"  class="zoomimg"><img src="'.$row['message'].'" width="150"></a>';
 			}
 
 			if($row['type'] == 'video'){

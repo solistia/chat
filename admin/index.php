@@ -22,6 +22,7 @@ $allsound = $services->select_table_sound_all();
 	<link href="../dist/css/lib/bootstrap.min.css" type="text/css" rel="stylesheet">
 	<link href="../dist/css/image_reloader.css" type="text/css" rel="stylesheet">
 	<link href="../dist/css/style.css" type="text/css" rel="stylesheet">
+	<link rel="stylesheet" href="../dist/css/simple-lightbox.css?v2.8.0" />
 	<!-- Swipe core CSS -->
 	<link href="../dist/css/swipe.min.css" type="text/css" rel="stylesheet">
 	<!-- Favicon -->
@@ -53,7 +54,7 @@ $allsound = $services->select_table_sound_all();
 				<div class="container">
 					<div class="col-md-12">
 						<div class="tab-content">
-							<a class="close" onclick="closeSidebar()">&times;</a>
+							<a class="close openSidebar" onclick="closeSidebar()">&times;</a>
 							<!-- Start of Discussions -->
 							<div id="discussions" class="tab-pane fade active show">					
 								<div class="discussions">
@@ -108,7 +109,7 @@ $allsound = $services->select_table_sound_all();
 								<div class="container">
 									<div class="col-md-12">
 										<div class="inside">
-											<div class="data" onclick="openSidebar()">
+											<div class="data openSidebar" onclick="openSidebar()">
 												<i class="material-icons">dehaze</i>
 											</div>
 											<div class="data">
@@ -162,11 +163,12 @@ $allsound = $services->select_table_sound_all();
 			</div>
 		</div> <!-- Layout -->
 	</main>
+	<script src="../dist/js/simple-lightbox.js?v2.8.0"></script>
 	<script type="text/javascript">
 	  var current;
 	  var offset = 15;
 	  var audio = new Audio('../dist/sound/<?= $sound['file'] ?>');
-	  audio.mute = true;
+	  var $gallery = new SimpleLightbox('.zoomimg', {});
 	  $(function(){
 	  		//load more
 			$('#content').scroll(function() {
@@ -192,7 +194,7 @@ $allsound = $services->select_table_sound_all();
 			    	}
 
 			    	if(data.type == 'image'){
-			    		message = '<img src="'+data.message+'" class="slow-images" width="150">';
+			    		message = '<a href="'+data.message+'" class="zoomimg"><img src="'+data.message+'" class="slow-images" width="150" ></a>';
 			    	}
 
 			    	if(data.type == 'video'){
@@ -216,8 +218,14 @@ $allsound = $services->select_table_sound_all();
 							'</div>';
 					$('#message_area').append(append);
 					$("#content").animate({ scrollTop: $('#message_area_container').prop("scrollHeight")}, 1000);
+
 					$(".slow-images").imageReloader();
-		    	}
+
+					if(data.type == 'image'){
+						$gallery.refresh();
+					}
+
+			    }
 
 		    	if(data.sendto == 'system'){
 		    		audio.play();
@@ -318,7 +326,8 @@ $allsound = $services->select_table_sound_all();
 		        	var lastMsg = $('.message:last');
 		        	$('#current_user_name').text($('#'+id+'name').text());
 		        	$('#current_user_note').val($('#'+id+'note').text());
-					$("#content").animate({ scrollTop: $('#message_area_container').prop("scrollHeight")+1000}, 1500);
+					$("#content").animate({ scrollTop: $('#message_area_container').prop("scrollHeight")+5000}, 1500);
+					$gallery.refresh();
 		        }
 		    });
 	    } 
@@ -336,7 +345,8 @@ $allsound = $services->select_table_sound_all();
 			        	offset = offset +15;
 			            var firstMsg = $('.message:first');
 			            $('#message_area').prepend(data);
-			            $('#content').scrollTop(firstMsg.offset().top);			        		
+			            $('#content').scrollTop(firstMsg.offset().top);
+			            $gallery.refresh();		        		
 		        	}	        
 		        }
 		    });

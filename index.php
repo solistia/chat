@@ -47,14 +47,15 @@ if(!$user){
 	<link href="dist/css/lib/bootstrap.min.css" type="text/css" rel="stylesheet">
 	<link href="dist/css/image_reloader.css" type="text/css" rel="stylesheet">
 	<link href="dist/css/style.css" type="text/css" rel="stylesheet">
+	<link rel="stylesheet" href="dist/css/simple-lightbox.css?v2.8.0" />
 	<!-- Swipe core CSS -->
 	<link href="dist/css/swipe.min.css" type="text/css" rel="stylesheet">
 	<!-- Favicon -->
 	<link href="dist/img/favicon.png" type="image/png" rel="icon">
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js" type="text/javascript" ></script>	
-		<script src="https://js.pusher.com/7.1/pusher.min.js"></script>
+	<script src="https://js.pusher.com/7.1/pusher.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.3.0/bootbox.min.js" type="text/javascript" ></script>
-	<script src="dist/js/jquery.imageReloader.js" type="text/javascript" ></script>		
+	<script src="dist/js/jquery.imageReloader.js" type="text/javascript" ></script>	
 </head>
 <body>
 	<main>
@@ -114,11 +115,11 @@ if(!$user){
 			</div>
 		</div> <!-- Layout -->
 	</main>
-
+	<script src="dist/js/simple-lightbox.js?v2.8.0"></script>
 	<script type="text/javascript">
 		var offset = 15;
 		var audio = new Audio('dist/sound/line.mp3');
-
+		var $gallery = new SimpleLightbox('.zoomimg', {});
 	  	$(function(){
 		    // Enable pusher logging - don't include this in production
 		    //Pusher.logToConsole = true;
@@ -143,7 +144,7 @@ if(!$user){
 		    	}
 
 		    	if(data.type == 'image'){
-		    		message = '<img src="'+data.message+'" class="slow-images" width="150">';
+		    		message = '<a href="'+data.message+'" class="zoomimg"><img src="'+data.message+'" class="slow-images" width="150"></a>';
 		    	}
 
 		    	if(data.type == 'video'){
@@ -170,6 +171,9 @@ if(!$user){
 				$('#message_area').append(append);
 				$("#content").animate({ scrollTop: $('#message_area_container').prop("scrollHeight")}, 1000);
 				$(".slow-images").imageReloader();
+				if(data.type == 'image'){
+					$gallery.refresh();
+				}
 		    });		    
 
 		    //send message
@@ -218,7 +222,8 @@ if(!$user){
 		        success: function(data){
 		        	$('#message_area').append(data);
 		        	var lastMsg = $('.message:last');
-					$("#content").animate({ scrollTop: $('#message_area_container').prop("scrollHeight")+1000}, 1500);
+					$("#content").animate({ scrollTop: $('#message_area_container').prop("scrollHeight")+5000}, 1500);
+					$gallery.refresh();
 		        }
 		    });
 
@@ -236,7 +241,8 @@ if(!$user){
 			        	offset = offset +15;
 			            var firstMsg = $('.message:first');
 			            $('#message_area').prepend(data);
-			            $('#content').scrollTop(firstMsg.offset().top);			        		
+			            $('#content').scrollTop(firstMsg.offset().top);
+			            $gallery.refresh();		        		
 		        	}	   
 		        }
 		    });
