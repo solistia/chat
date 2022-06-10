@@ -79,6 +79,18 @@ pre{
     display: none;
 }
 
+.list-group{
+    max-height: 80%;
+    overflow-y: scroll;
+}
+.sidebar .discussions .single{
+    position: relative;
+}
+
+.sidebar .discussions .single .new{
+    left: 25px !important;
+}
+
 @media (max-width: 568px){
     .main .chat .content {
         height: 500px !important;
@@ -87,7 +99,8 @@ pre{
     .sidebar{
         position: absolute;
         z-index: 1000 !important;
-        width: 100% !important;        
+        width: 100% !important;
+        max-height: 100% !important;        
     }
 
      .popup {
@@ -99,6 +112,11 @@ pre{
       position: relative;
       transition: all 0s ease-in-out;
     }   
+
+    .list-group{
+        max-height: 80%;
+        overflow-y: scroll;
+    }
 
     .openSidebar{
         display: block;

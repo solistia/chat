@@ -15,37 +15,69 @@
 
 		$message ='
 
-		    <div class="">
-		    	<label class="bold">playerusername</label>
-	    		<label id="playerusername">'.$user['playerusername'].'</label>    			
+		    <div class="row">
+		    	<div class="col-4">
+		    		<label class="bold">playerusername</label>
+		    	</div>
+		    	<div class="col-7">		    	
+	    			<label id="playerusername">'.$user['playerusername'].'</label>
+	    		</div>      			
     		</div>
-		    <div class="">
-		    	<label class="bold">betflikuser</label>
-	    		<label id="betflikuser">'.$user['betflikuser'].'</label>    			
+		    <div class="row">
+		    	<div class="col-4">
+		    		<label class="bold">betflikuser</label>
+		    	</div>
+		    	<div class="col-7">		    	
+	    			<label id="betflikuser">'.$user['betflikuser'].'</label>
+	    		</div>      			
     		</div>
-		    <div class="">
-		    	<label class="bold">agentname_betflix </label>
-	    		<label id="agentname_betflix ">'.$user['agentname_betflix'].'</label>    			
+		    <div class="row">
+		    	<div class="col-4">
+		    		<label class="bold">agentname_betflix </label>
+		    	</div>
+		    	<div class="col-7">		    	
+	    			<label id="agentname_betflix ">'.$user['agentname_betflix'].'</label>
+	    		</div>      			
     		</div>
-		    <div class="">
-		    	<label class="bold">namesurname</label>
-	    		<label id="namesurname">'.$user['namesurname'].'</label>    			
+		    <div class="row">
+		    	<div class="col-4">
+		    		<label class="bold">namesurname</label>
+		    	</div>
+		    	<div class="col-7">		    	
+	    			<label id="namesurname">'.$user['namesurname'].'</label>
+	    		</div>      			
     		</div>
-		    <div class="">
-		    	<label class="bold">blankname</label>
-	    		<label id="blankname">'.$user['blankname'].'</label>    			
+		    <div class="row">
+		    	<div class="col-4">
+		    		<label class="bold">blankname</label>
+		    	</div>
+		    	<div class="col-7">	    	
+	    			<label id="blankname">'.$user['blankname'].'</label> 
+	    		</div>     			
     		</div>
-		    <div class="">
-		    	<label class="bold">bankaccountnumber</label>
-	    		<label id="bankaccountnumber">'.$user['bankaccountnumber'].'</label>    			
+		    <div class="row">
+		    	<div class="col-4">
+		    		<label class="bold">bankaccountnumber</label>
+		    	</div>
+		    	<div class="col-7">
+	    			<label id="bankaccountnumber">'.$user['bankaccountnumber'].'</label>    	
+	    		</div>  		
     		</div>    		    				
-		    <div class="">
-		    	<label class="bold">recommender</label>
-	    		<label id="recommender">'.$user['recommender'].'</label>    			
+		    <div class="row">
+		    	<div class="col-4">
+		    		<label class="bold">recommender</label>
+		    	</div>
+		    	<div class="col-7">
+	    			<label id="recommender">'.$user['recommender'].'</label>  
+	    		</div>    			
     		</div>
-		    <div class="">
-		    	<label class="bold">datetime_last </label>
-	    		<label id="datetime_last ">'.$user['datetime_last'].'</label>    			
+		    <div class="row">
+		    	<div class="col-4">
+		    		<label class="bold">datetime_last </label>
+		    	</div>
+		    	<div class="col-7">
+	    			<label id="datetime_last ">'.$user['datetime_last'].'</label>
+	    		</div>    			
     		</div>   
 		';
 

@@ -40,7 +40,7 @@ $allsound = $services->select_table_sound_all();
 	  <div class="popup">
 	    <h2 id="user_info_name">User Info</h2>
 	    <a class="close" onclick="closeOverley()">&times;</a>
-	    <div class="content" id="user_info">
+	    <div class="" id="user_info">
 			<!-- USER INFO -->      		    		   		 		
 	    </div>
 	  </div>
