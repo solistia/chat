@@ -189,7 +189,10 @@ if(!$user){
 				        //Ajax events
 				        success: function(data){
 				        	$message.val('');
-				        	//console.log(data);
+				        	var data = JSON.parse(data);
+				        	if(data.type != 'success'){
+				        		alert(data.message);
+				        	}
 				        }
 				    });
 			    }
@@ -207,7 +210,10 @@ if(!$user){
 				        //Ajax events
 				        success: function(data){
 				        	$message.val('');
-				        	//console.log(data);
+				        	var data = JSON.parse(data);
+				        	if(data.type != 'success'){
+				        		alert(data.message);
+				        	}
 				        }
 			    	});		    	
 			    }

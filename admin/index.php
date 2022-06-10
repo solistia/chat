@@ -255,6 +255,10 @@ $allsound = $services->select_table_sound_all();
 				        //Ajax events
 				        success: function(data){
 				        	$message.val('');
+				        	var data = JSON.parse(data);
+				        	if(data.type != 'success'){
+				        		alert(data.message);
+				        	}				        	
 				        }
 				    });
 			    }
@@ -271,6 +275,10 @@ $allsound = $services->select_table_sound_all();
 				        //Ajax events
 				        success: function(data){
 				        	$message.val('');
+				        	var data = JSON.parse(data);
+				        	if(data.type != 'success'){
+				        		alert(data.message);
+				        	}
 				        }
 			    	});		    	
 			    }
