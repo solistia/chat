@@ -1,4 +1,5 @@
 <?php 
+require 'services/pusher/trigger.php';
 
 if(!empty($_GET['returl_url'])){
 	$returl_url = $_GET['returl_url'];
@@ -130,8 +131,8 @@ if(!$user){
 				}
 			});			    
 
-		    var pusher = new Pusher('04f1f2f158fedc82e415', {
-		      cluster: 'ap1'
+		    var pusher = new Pusher('<?= $pusher_key ?>', {
+		      cluster: '<?= $pusher_cluster ?>'
 		    });
 
 		    var channel = pusher.subscribe('<?= $userid ?>');

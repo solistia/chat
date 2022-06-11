@@ -1,6 +1,7 @@
 <?php 
 session_start();
 require_once '../services/service.php';
+require '../services/pusher/trigger.php';
 $services = new Services();
 //$services2 = new Services2();
 
@@ -178,9 +179,8 @@ $allsound = $services->select_table_sound_all();
 				}
 			});
 
-			// initial pusher
-		    var pusher = new Pusher('04f1f2f158fedc82e415', {
-		      cluster: 'ap1'
+		    var pusher = new Pusher('<?= $pusher_key ?>', {
+		      cluster: '<?= $pusher_cluster ?>'
 		    });
 
 		    var channel = pusher.subscribe('system');
